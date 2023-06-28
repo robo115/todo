@@ -1,0 +1,103 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+
+
+<section style="background-image: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%), linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);">
+    <div class="h-100 container py-5">
+        <div class="h-100 row d-flex justify-content-center align-items-center">
+            <div class="col col-lg-9 col-xl-7">
+                <div class="card rounded-3">
+                    <div class="card-body p-4">
+
+                        <h4 class="text-center my-3 pb-3">To Do App <img src="../static/success (1).png" class="tm-5"
+                                                                         alt="image" height="51"></h4>
+
+                        <form method="POST" action="{{ url_for ('todolist') }}"
+                              class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
+                            <div class="col-12">
+                                <div class="form-outline">
+                                    <input type="text" id="item" name="item" class="form-control" required
+                                           placeholder="Enter a task here">
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                        {% if to_list_all %}
+                            <table class="table mb-4 ">
+                            <thead>
+                            <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">Todo item</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for todo in to_list %}
+                                <tr>
+                                    <th scope="row">{{ todo.id }}</th>
+                                    <td>{{ todo.item }}</td>
+                                    {% if todo.status == False %}
+                                        <td>In progress ⏱</td>
+                                    {% else %}
+                                        <td>Finished ✅</td>
+                                    {% endif %}
+                                    <td>
+                                        <div class="btn-group dropend">
+                                            <a class="btn btn-success btn-secondary dropdown-toggle" href="#"
+                                               role="button"
+                                               id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                                Actions
+                                            </a>
+
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                <li>
+                                                    <form method="POST" action="{{ url_for ('delete') }}">
+                                                        <input name="id" value="{{ todo.id }}" type="hidden">
+                                                        <button type="submit" class="dropdown-item">Delete ❌</button>
+                                                    </form>
+                                                </li>
+                                                {% if todo.status == False %}
+                                                    <li>
+                                                        <form method="POST" action="{{ url_for ('finished') }}">
+                                                            <input name="id" value="{{ todo.id }}" type="hidden">
+                                                            <button type="submit" class="dropdown-item">Finished 🎉
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                {% else %}
+                                                <li>
+                                                    <form method="POST" action="{{ url_for ('not_done') }}">
+                                                        <input name="id" value="{{ todo.id }}" type="hidden">
+                                                        <button type="submit" class="dropdown-item">Not Done ❎</button>
+                                                    </form>
+                                                 {% endif %}
+                                                </li>
+                                            <form action="{{ url_for ("edit") }}" method="POST">
+                                                     <input name="id" value="{{ todo.id }}" type="hidden">
+                                                    <button type="submit" class="dropdown-item" >Edit 🖋</button>
+                                            </form>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <h3 class="text-center">You have no tasks</h3>
+                        {% endif %}
+                        </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
